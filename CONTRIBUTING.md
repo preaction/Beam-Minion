@@ -6,11 +6,9 @@ and patches.
 
 ## Communication
 
-XXX Add communication forums
-
 If you're not sure about anything, please open an issue and ask, or
 e-mail the project founder <preaction@cpan.org> or [talk to us on IRC on
-irc.perl.org channel #cpantesters-discuss](https://chat.mibbit.com/?channel=%23cpantesters-discuss&server=irc.perl.org)!
+irc.perl.org channel #beam](https://chat.mibbit.com/?channel=%23beam&server=irc.perl.org)!
 
 ## Standard of Conduct
 
@@ -28,10 +26,39 @@ Remember, all the people who contribute to this project are volunteers.
 
 ## About this Project
 
+The Beam project is a set of integration patterns to be used in Perl
+projects. Integration patterns allow for different systems to work
+together with a common set of APIs designed to enable communication and
+collaboration between them. Using integration patterns creates more
+modular, reusable, maintainable, and isolated code (for those times
+where you need to wholly replace a part of your project).
+
+Beam::Minion is a distributed task runner. Tasks are enqueued and then
+executed when the next available worker is ready. Tasks are defined by
+using a Beam::Wire container, potentially of Beam::Runnable objects.
+
+The Beam modules are meant to be easy to use and to follow good OO
+design principles while still being Perly.
+
+Inspiration for the Beam project is found in:
+
+* [Enterprise Integration
+  Patterns](http://www.enterpriseintegrationpatterns.com)
+* [Java's Spring framework](https://spring.io)
+
 ### Project Goals
 
-XXX Add project goals
+This project is to integrate Beam and Minion to create a simple
+distributed task runner.
 
+This is meant to be a thin layer between Beam::Wire and Minion, so if
+a feature can be added in those places, it will be preferable to adding
+it here.
+
+Task running patterns like Map-Reduce can be implemented and executed
+using this project, but no assistance with these patterns is currently
+planned. This may be added later, or it may be the goal of a future
+Beam::Worker project.
 
 ### Repository Layout
 
@@ -49,6 +76,9 @@ available to users from a script, the script should call the module.
 Command-line scripts go in the `bin/` directory. Most of the real
 functionality of these should be in a library, but these scripts must
 call the library function and document the command-line interface.
+
+This application uses the Beam::Runner::Command framework to add new
+commands to the existing `beam` command.
 
 #### `t/`
 
