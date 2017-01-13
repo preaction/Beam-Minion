@@ -1,0 +1,38 @@
+# NAME
+
+Beam::Minion - A distributed task runner for Beam::Wire containers
+
+# VERSION
+
+version 0.001
+
+# STATUS
+
+<a href="https://travis-ci.org/preaction/Beam-Minion"><img src="https://travis-ci.org/preaction/Beam-Minion.svg?branch=master"></a><a href="https://coveralls.io/r/preaction/Beam-Minion"><img src="https://coveralls.io/repos/preaction/Beam-Minion/badge.png" alt="Coverage Status" /></a>
+
+# SYNOPSIS
+
+    beam minion worker <container>...
+    beam minion run <container> <service> [<args>...]
+    beam minion help
+
+# DESCRIPTION
+
+[Beam::Minion](https://metacpan.org/pod/Beam::Minion) is a distributed task runner. One or more workers are
+created to run tasks, and then each task is sent to a worker to be run.
+Tasks are configured by [Beam::Wire](https://metacpan.org/pod/Beam::Wire) container files.
+
+# SEE ALSO
+
+[Beam::Wire](https://metacpan.org/pod/Beam::Wire), [Beam::Runner](https://metacpan.org/pod/Beam::Runner), [Minion](https://metacpan.org/pod/Minion)
+
+# AUTHOR
+
+Doug Bell <preaction@cpan.org>
+
+# COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2017 by Doug Bell.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
