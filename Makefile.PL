@@ -19,19 +19,22 @@ my %WriteMakefileArgs = (
   "PREREQ_PM" => {
     "Beam::Runner" => 0,
     "Beam::Wire" => 0,
-    "Minion" => 0
+    "Minion" => 0,
+    "Mojolicious" => 0
   },
   "TEST_REQUIRES" => {
     "ExtUtils::MakeMaker" => 0,
     "File::Spec" => 0,
     "IO::Handle" => 0,
     "IPC::Open3" => 0,
+    "Minion::Backend::SQLite" => 0,
     "Mock::MonkeyPatch" => 0,
+    "Test::Lib" => 0,
     "Test::More" => "1.001005"
   },
   "VERSION" => "0.001",
   "test" => {
-    "TESTS" => "t/*.t"
+    "TESTS" => "t/*.t t/command/*.t"
   }
 );
 
@@ -44,7 +47,10 @@ my %FallbackPrereqs = (
   "IO::Handle" => 0,
   "IPC::Open3" => 0,
   "Minion" => 0,
+  "Minion::Backend::SQLite" => 0,
   "Mock::MonkeyPatch" => 0,
+  "Mojolicious" => 0,
+  "Test::Lib" => 0,
   "Test::More" => "1.001005"
 );
 

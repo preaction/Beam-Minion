@@ -34,6 +34,7 @@
             "Beam::Runner" : "0",
             "Beam::Wire" : "0",
             "Minion" : "0",
+            "Mojolicious" : "0",
             "perl" : "5.010"
          }
       },
@@ -46,7 +47,9 @@
             "File::Spec" : "0",
             "IO::Handle" : "0",
             "IPC::Open3" : "0",
+            "Minion::Backend::SQLite" : "0",
             "Mock::MonkeyPatch" : "0",
+            "Test::Lib" : "0",
             "Test::More" : "1.001005"
          }
       }
@@ -62,6 +65,10 @@
       },
       "Beam::Minion::Command::worker" : {
          "file" : "lib/Beam/Minion/Command/worker.pm",
+         "version" : "0.001"
+      },
+      "Beam::Minion::Util" : {
+         "file" : "lib/Beam/Minion/Util.pm",
          "version" : "0.001"
       },
       "Beam::Runner::Command::minion" : {
