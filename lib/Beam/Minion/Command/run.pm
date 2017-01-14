@@ -22,12 +22,12 @@ L<Beam::Minion>, L<Minion>
 
 use strict;
 use warnings;
-use Minion;
+use Beam::Minion::Util qw( minion );
 
 sub run {
     my ( $class, $container, $service_name, @args ) = @_;
-    my $minion = Minion->new( split /\+/, $ENV{BEAM_MINION} );
-    $minion->enqueue( $service_name, \@args );
+    my $minion = minion();
+    $minion->enqueue( $service_name, \@args, { queue => $container } );
 }
 
 1;

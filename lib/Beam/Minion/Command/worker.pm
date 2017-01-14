@@ -25,12 +25,15 @@ use strict;
 use warnings;
 use Beam::Wire;
 use Beam::Runner::Util qw( find_container_path );
-use Minion;
+use Beam::Minion::Util qw( minion_init_args );
+use Mojolicious;
 use Minion::Command::minion::worker;
 
 sub run {
     my ( $class, $container ) = @_;
-    my $minion = Minion->new( split /\+/, $ENV{BEAM_MINION} );
+    my $app = Mojolicious->new;
+    $app->plugin( Minion => { minion_init_args() } );
+    my $minion = $app->minion;
     my $path = find_container_path( $container );
     my $wire = Beam::Wire->new( file => $path );
     my $config = $wire->config;
@@ -44,8 +47,8 @@ sub run {
             $job->$method( { exit => $exit } );
         } );
     }
-    my $cmd = Minion::Command::minion::worker->new( app => $minion );
-    $cmd->run;
+    my $cmd = Minion::Command::minion::worker->new( app => $app );
+    $cmd->run( '-q', $container );
 }
 
 1;
