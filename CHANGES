@@ -1,5 +1,11 @@
 Changelog for Beam-Minion
 
+{{ $NEXT }}
+
+    [Fixed]
+
+    - Updated prereq versions to have all the features we need
+
 0.001     2017-01-13 20:01:57-06:00 America/Chicago
 
     - Initial release
