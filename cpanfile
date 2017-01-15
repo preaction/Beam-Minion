@@ -1,7 +1,7 @@
-requires "Beam::Runner" => "0";
-requires "Beam::Wire" => "0";
+requires "Beam::Runner" => "0.006";
+requires "Beam::Wire" => "1.019";
 requires "Minion" => "0";
-requires "Mojolicious" => "0";
+requires "Mojolicious" => "7";
 requires "perl" => "5.010";
 
 on 'test' => sub {
