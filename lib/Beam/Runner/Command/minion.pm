@@ -1,5 +1,5 @@
 package Beam::Runner::Command::minion;
-our $VERSION = '0.002';
+our $VERSION = '0.003';
 # ABSTRACT: Command for L<beam> to run distributed tasks
 
 =head1 SYNOPSIS
