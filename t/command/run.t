@@ -13,9 +13,19 @@ L<Beam::Minion::Command::run>
 use strict;
 use warnings;
 use Test::More;
+use Test::Fatal;
 use Beam::Minion::Command::run;
 use File::Temp;
 my $tmp = File::Temp->new( EXLOCK => 0 );
+
+subtest 'BEAM_MINION must be set' => sub {
+    like
+        exception {
+            Beam::Minion::Command::run->run( container => 'ping', 'foo' );
+        },
+        qr{You must set the BEAM_MINION environment variable},
+        'BEAM_MINION missing raises exception';
+};
 
 {
     my $class = 'Beam::Minion::Command::run';

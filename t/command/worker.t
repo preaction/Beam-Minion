@@ -18,6 +18,7 @@ use strict;
 use warnings;
 use Test::More;
 use Test::Lib;
+use Test::Fatal;
 use Beam::Minion::Command::worker;
 use File::Temp;
 use FindBin ();
@@ -61,6 +62,16 @@ subtest 'failure job' => sub {
     my $job = $minion->job( $id );
     is_deeply $job->info->{result}, { exit => 1 }, 'job result is correct';
     is $job->info->{state}, 'failed', 'job failed';
+};
+
+subtest 'BEAM_MINION must be set' => sub {
+    local $ENV{BEAM_MINION} = '';
+    like
+        exception {
+            Beam::Minion::Command::worker->run( 'container' );
+        },
+        qr{You must set the BEAM_MINION environment variable},
+        'BEAM_MINION missing raises exception';
 };
 
 done_testing;

@@ -62,6 +62,9 @@ C<Storable+/tmp/minion.db>.  Any backend may be used this way
 =cut
 
 sub minion_init_args {
+    die "You must set the BEAM_MINION environment variable to the Minion database URL.\n"
+        . "See `perldoc Beam::Minion` for getting started instructions.\n"
+        unless $ENV{BEAM_MINION};
     my ( $backend, $url );
     if ( $ENV{BEAM_MINION} =~ /^[^+:]+\+/ ) {
         return split /\+/, $ENV{BEAM_MINION};
