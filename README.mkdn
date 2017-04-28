@@ -4,7 +4,7 @@ Beam::Minion - A distributed task runner for Beam::Wire containers
 
 # VERSION
 
-version 0.002
+version 0.003
 
 # STATUS
 
@@ -12,6 +12,7 @@ version 0.002
 
 # SYNOPSIS
 
+    export BEAM_MINION=sqlite://test.db
     beam minion worker <container>...
     beam minion run <container> <service> [<args>...]
     beam minion help
@@ -20,7 +21,53 @@ version 0.002
 
 [Beam::Minion](https://metacpan.org/pod/Beam::Minion) is a distributed task runner. One or more workers are
 created to run tasks, and then each task is sent to a worker to be run.
-Tasks are configured by [Beam::Wire](https://metacpan.org/pod/Beam::Wire) container files.
+Tasks are configured as [Beam::Runnable](https://metacpan.org/pod/Beam::Runnable) objects by [Beam::Wire](https://metacpan.org/pod/Beam::Wire)
+container files.
+
+# GETTING STARTED
+
+## Configure Minion
+
+To start running your [Beam::Runner](https://metacpan.org/pod/Beam::Runner) jobs, you must first start
+a [Minion](https://metacpan.org/pod/Minion) worker with the [beam minion
+worker.command](https://metacpan.org/pod/Beam::Minion::Command::worker).  Minion requires
+a database to coordinate workers, and communicates with this database
+using a [Minion::Backend](https://metacpan.org/pod/Minion::Backend).
+
+The supported Minion backends are:
+
+- [Minion::Backend::SQLite](https://metacpan.org/pod/Minion::Backend::SQLite) - `sqlite:<db_path>`
+- [Minion::Backend::Pg](https://metacpan.org/pod/Minion::Backend::Pg) - `postgresql://<user>:<pass>@<host>/<database>`
+- [Minion::Backend::mysql](https://metacpan.org/pod/Minion::Backend::mysql) - `mysql://<user>:<pass>@<host>/<database>`
+- [Minion::Backend::MongoDB](https://metacpan.org/pod/Minion::Backend::MongoDB) - `mongodb://<host>:<port>`
+
+Once you've picked a database backend, configure the `BEAM_MINION`
+environment variable with the URL. Minion will automatically deploy the
+database tables it needs, so be sure to allow the right permissions (if
+the database has such things).
+
+In order to communicate with Minion workers on other machines, it will
+be necessary to use a database accessible from the network (so, not
+SQLite).
+
+## Start a Worker
+
+Once the `BEAM_MINION` environment variable is set, you can start
+a worker with `beam minion worker <container>`. Each worker can run
+jobs from one container, specified as the argument to the `beam minion
+worker` command. Each worker will run up to 4 jobs concurrently.
+
+## Spawn a Job
+
+Jobs are spawned with `beam minion run <container> <service>`.
+The `service` must be an object that consumes the [Beam::Runnable](https://metacpan.org/pod/Beam::Runnable)
+role. `container` should be a path to a container file and can be
+an absolute path, a path relative to the current directory, or a
+path relative to one of the paths in the `BEAM_PATH` environment
+variable (separated by `:`).
+
+You can queue up jobs before you have workers running. As soon as
+a worker is available, it will start running jobs from the queue.
 
 # SEE ALSO
 
