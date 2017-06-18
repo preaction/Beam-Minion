@@ -24,8 +24,18 @@ use Module::Runtime qw( use_module compose_module_name );
 
 sub run {
     my ( $class, $cmd, @args ) = @_;
+    if ( !$cmd ) {
+        die "ERROR: No 'beam minion' sub-command specified\n";
+    }
     my $cmd_class = compose_module_name( 'Beam::Minion::Command', $cmd );
-    return use_module( $cmd_class )->run( @args );
+    eval { use_module( $cmd_class ) };
+    if ( $@ ) {
+        if ( $@ =~ m{^Can't locate Beam/Minion/Command/} ) {
+            die "ERROR: No such sub-command: $cmd\n";
+        }
+        die "Error loading module '$cmd_class': $@\n";
+    }
+    return $cmd_class->run( @args );
 }
 
 1;
