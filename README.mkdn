@@ -4,7 +4,7 @@ Beam::Minion - A distributed task runner for Beam::Wire containers
 
 # VERSION
 
-version 0.003
+version 0.004
 
 # STATUS
 
@@ -12,10 +12,15 @@ version 0.003
 
 # SYNOPSIS
 
+    # Command-line interface
     export BEAM_MINION=sqlite://test.db
     beam minion worker <container>...
     beam minion run <container> <service> [<args>...]
     beam minion help
+
+    # Perl interface
+    local $ENV{BEAM_MINION} = 'sqlite://test.db';
+    Beam::Minion->enqueue( $container, $service, @args );
 
 # DESCRIPTION
 
@@ -23,6 +28,15 @@ version 0.003
 created to run tasks, and then each task is sent to a worker to be run.
 Tasks are configured as [Beam::Runnable](https://metacpan.org/pod/Beam::Runnable) objects by [Beam::Wire](https://metacpan.org/pod/Beam::Wire)
 container files.
+
+# SUBROUTINES
+
+## enqueue
+
+    Beam::Minion->enqueue( $container_name, $task_name, @args );
+
+Enqueue the task named `$task_name` from the container named `$container_name`.
+The `BEAM_MINION` environment variable must be set.
 
 # GETTING STARTED
 
