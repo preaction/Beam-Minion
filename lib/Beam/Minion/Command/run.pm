@@ -51,12 +51,11 @@ L<Beam::Minion>, L<Minion>
 
 use strict;
 use warnings;
-use Beam::Minion::Util qw( minion );
+use Beam::Minion;
 
 sub run {
     my ( $class, $container, $service_name, @args ) = @_;
-    my $minion = minion();
-    $minion->enqueue( $service_name, \@args, { queue => $container } );
+    Beam::Minion->enqueue( $container, $service_name, @args );
 }
 
 1;

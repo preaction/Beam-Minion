@@ -4,10 +4,15 @@ our $VERSION = '0.004';
 
 =head1 SYNOPSIS
 
+    # Command-line interface
     export BEAM_MINION=sqlite://test.db
     beam minion worker <container>...
     beam minion run <container> <service> [<args>...]
     beam minion help
+
+    # Perl interface
+    local $ENV{BEAM_MINION} = 'sqlite://test.db';
+    Beam::Minion->enqueue( $container, $service, @args );
 
 =head1 DESCRIPTION
 
@@ -84,8 +89,22 @@ L<Beam::Wire>, L<Beam::Runner>, L<Minion>
 
 use strict;
 use warnings;
+use Beam::Minion::Util qw( minion );
 
+=sub enqueue
 
+    Beam::Minion->enqueue( $container_name, $task_name, @args );
+
+Enqueue the task named C<$task_name> from the container named C<$container_name>.
+The C<BEAM_MINION> environment variable must be set.
+
+=cut
+
+sub enqueue {
+    my ( $class, $container, $task, @args ) = @_;
+    my $minion = minion();
+    $minion->enqueue( $task, \@args, { queue => $container } );
+}
 
 1;
 
