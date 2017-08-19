@@ -17,7 +17,10 @@ use Beam::Minion::Util qw( minion minion_init_args );
 
 my %backend = (
     mysql => {
-        'mysql://user@127.0.0.1/minion' => [qw( mysql mysql://user@127.0.0.1/minion )],
+        'mysql://user@127.0.0.1/minion'
+            => [qw( mysql mysql://user@127.0.0.1/minion )],
+        'mysql+dsn+dbi:mysql:mysql_read_default_file=~/.my.cnf'
+            => [ mysql => [qw( dsn dbi:mysql:mysql_read_default_file=~/.my.cnf )] ],
     },
     Pg => {
         'postgres://user@127.0.0.1/minion' => [qw( Pg postgres://user@127.0.0.1/minion )],

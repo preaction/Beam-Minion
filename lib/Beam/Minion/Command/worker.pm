@@ -56,7 +56,13 @@ use Minion::Command::minion::worker;
 sub run {
     my ( $class, $container ) = @_;
     my $app = Mojolicious->new;
-    $app->plugin( Minion => { minion_init_args() } );
+    my ( $backend, @args ) = minion_init_args;
+    if ( @args == 1 ) {
+        $app->plugin( Minion => { $backend => @args } );
+    }
+    else {
+        $app->plugin( Minion => { $backend => \@args } );
+    }
     my $minion = $app->minion;
     my $path = find_container_path( $container );
     my $wire = Beam::Wire->new( file => $path );

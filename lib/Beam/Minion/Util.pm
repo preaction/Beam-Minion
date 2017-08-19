@@ -67,7 +67,11 @@ sub minion_init_args {
         unless $ENV{BEAM_MINION};
     my ( $backend, $url );
     if ( $ENV{BEAM_MINION} =~ /^[^+:]+\+/ ) {
-        return split /\+/, $ENV{BEAM_MINION};
+        my @args = split /\+/, $ENV{BEAM_MINION};
+        if ( @args == 2 ) {
+            return @args;
+        }
+        return $args[0], [ @args[1..$#args] ];
     }
     my ( $schema ) = $ENV{BEAM_MINION} =~ /^([^:]+)/;
     return $BACKEND{ $schema }, $ENV{BEAM_MINION};
