@@ -49,21 +49,21 @@ use strict;
 use warnings;
 use Beam::Wire;
 use Beam::Runner::Util qw( find_container_path );
-use Beam::Minion::Util qw( minion_init_args );
+use Beam::Minion::Util qw( minion );
+use Scalar::Util qw( weaken );
 use Mojolicious;
 use Minion::Command::minion::worker;
 
 sub run {
     my ( $class, $container ) = @_;
     my $app = Mojolicious->new;
-    my ( $backend, @args ) = minion_init_args;
-    if ( @args == 1 ) {
-        $app->plugin( Minion => { $backend => @args } );
-    }
-    else {
-        $app->plugin( Minion => { $backend => \@args } );
-    }
-    my $minion = $app->minion;
+
+    push @{$app->commands->namespaces}, 'Minion::Command';
+
+    my $minion = minion();
+    weaken $minion->app($app)->{app};
+    $app->helper(minion => sub {$minion});
+
     my $path = find_container_path( $container );
     my $wire = Beam::Wire->new( file => $path );
     my $config = $wire->config;
