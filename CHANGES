@@ -1,5 +1,12 @@
 Changelog for Beam-Minion
 
+0.005     2017-08-19 21:42:31-05:00 America/Chicago
+
+    [Fixed]
+
+    - Fixed raw Minion args to allow passing plain DBI DSNs. This allows
+      me to use the `mysql_read_defaults_file` DBD::mysql configuration.
+
 0.004     2017-08-14 13:01:07-05:00 America/Chicago
 
     [Added]
