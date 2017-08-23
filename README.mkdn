@@ -4,7 +4,7 @@ Beam::Minion - A distributed task runner for Beam::Wire containers
 
 # VERSION
 
-version 0.005
+version 0.006
 
 # STATUS
 
