@@ -52,11 +52,14 @@ use Beam::Runner::Util qw( find_container_path );
 use Beam::Minion::Util qw( minion );
 use Scalar::Util qw( weaken );
 use Mojolicious;
+use Mojo::Log;
 use Minion::Command::minion::worker;
 
 sub run {
     my ( $class, $container ) = @_;
-    my $app = Mojolicious->new;
+    my $app = Mojolicious->new(
+        log => Mojo::Log->new, # Log to STDERR
+    );
 
     push @{$app->commands->namespaces}, 'Minion::Command';
 
