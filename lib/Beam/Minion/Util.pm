@@ -54,8 +54,14 @@ L<Minion::Backend::MongoDB>, L<Minion::Backend::mysql>.
 
 =item <backend>+<url>
 
-A backend name and backend spec, separated by C<+>, like
-C<Storable+/tmp/minion.db>.  Any backend may be used this way
+A backend name and arguments, separated by C<+>, like
+C<Storable+/tmp/minion.db>. Any backend may be used this way.
+
+If your backend requires more arguments, you can separate them with
+C<+>:
+
+    # Configure the MySQL backend with a DBI DSN
+    BEAM_MINION=mysql+dsn+dbi:mysql:minion
 
 =back
 
@@ -68,10 +74,7 @@ sub minion_init_args {
     my ( $backend, $url );
     if ( $ENV{BEAM_MINION} =~ /^[^+:]+\+/ ) {
         my @args = split /\+/, $ENV{BEAM_MINION};
-        if ( @args == 2 ) {
-            return @args;
-        }
-        return $args[0], [ @args[1..$#args] ];
+        return @args;
     }
     my ( $schema ) = $ENV{BEAM_MINION} =~ /^([^:]+)/;
     return $BACKEND{ $schema }, $ENV{BEAM_MINION};
