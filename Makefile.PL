@@ -17,7 +17,7 @@ my %WriteMakefileArgs = (
   "MIN_PERL_VERSION" => "5.010",
   "NAME" => "Beam::Minion",
   "PREREQ_PM" => {
-    "Beam::Runner" => "0.006",
+    "Beam::Runner" => "0.014",
     "Beam::Wire" => "1.019",
     "Minion" => 0,
     "Mojolicious" => 7
@@ -42,7 +42,7 @@ my %WriteMakefileArgs = (
 
 
 my %FallbackPrereqs = (
-  "Beam::Runner" => "0.006",
+  "Beam::Runner" => "0.014",
   "Beam::Wire" => "1.019",
   "ExtUtils::MakeMaker" => 0,
   "File::Spec" => 0,

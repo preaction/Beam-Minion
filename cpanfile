@@ -1,4 +1,4 @@
-requires "Beam::Runner" => "0.006";
+requires "Beam::Runner" => "0.014";
 requires "Beam::Wire" => "1.019";
 requires "Minion" => "0";
 requires "Mojolicious" => "7";

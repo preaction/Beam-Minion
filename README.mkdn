@@ -4,7 +4,7 @@ Beam::Minion - A distributed task runner for Beam::Wire containers
 
 # VERSION
 
-version 0.006
+version 0.007
 
 # STATUS
 
@@ -14,13 +14,13 @@ version 0.006
 
     # Command-line interface
     export BEAM_MINION=sqlite://test.db
-    beam minion worker <container>...
+    beam minion worker
     beam minion run <container> <service> [<args>...]
     beam minion help
 
     # Perl interface
     local $ENV{BEAM_MINION} = 'sqlite://test.db';
-    Beam::Minion->enqueue( $container, $service, @args );
+    Beam::Minion->enqueue( $container, $service, \@args, \%opt );
 
 # DESCRIPTION
 
@@ -33,10 +33,27 @@ container files.
 
 ## enqueue
 
-    Beam::Minion->enqueue( $container_name, $task_name, @args );
+    Beam::Minion->enqueue( $container_name, $task_name, \@args, \%opt );
 
 Enqueue the task named `$task_name` from the container named `$container_name`.
 The `BEAM_MINION` environment variable must be set.
+
+`\%opt` is a hash reference with the following keys:
+
+- attempts
+
+    Number of times to retry this job if it fails. Defaults to `1`.
+
+- delay
+
+    Time (in seconds) to delay this job (from now). Defaults to `0`.
+
+- priority
+
+    The job priority. Higher priority jobs get performed first. Defaults to `0`.
+
+(These are the same options allowed in [the Minion "enqueue"
+method](http://mojolicious.org/perldoc/Minion#enqueue1))
 
 # GETTING STARTED
 
@@ -67,9 +84,9 @@ SQLite).
 ## Start a Worker
 
 Once the `BEAM_MINION` environment variable is set, you can start
-a worker with `beam minion worker <container>`. Each worker can run
-jobs from one container, specified as the argument to the `beam minion
-worker` command. Each worker will run up to 4 jobs concurrently.
+a worker with `beam minion worker`. Each worker can run jobs from
+all the containers it can find from the `BEAM_PATH` environment
+variable. Each worker will run up to 4 jobs concurrently.
 
 ## Spawn a Job
 
