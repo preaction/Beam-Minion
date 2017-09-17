@@ -1,5 +1,13 @@
 Changelog for Beam-Minion
 
+{{ $NEXT }}
+
+    [Changed]
+
+    - The worker is now able to run tasks from all containers by
+      default. This opens up Minion queues to be used for other
+      purposes, such as prioritization and partitioning jobs.
+
 0.006     2017-08-22 18:48:33-05:00 America/Chicago
 
     [Fixed]

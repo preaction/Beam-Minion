@@ -4,25 +4,16 @@ our $VERSION = '0.007';
 
 =head1 SYNOPSIS
 
-    beam minion worker <container>
+    beam minion worker
 
 =head1 DESCRIPTION
 
-This command takes a L<Beam::Wire> container (optionally searching
-C<BEAM_PATH> a la L<Beam::Runner>) and starts a L<Minion::Worker> worker that
-will run any service inside.
+This command takes all the L<Beam::Wire> containers located on the
+C<BEAM_PATH> environment variable and starts a L<Minion::Worker> worker
+that will run any services inside.
 
 Service jobs are added to the queue using the L<beam minion run
 command|Beam::Minion::Command::run>.
-
-=head1 ARGUMENTS
-
-=head2 container
-
-The container of tasks for this worker to handle. This can be an absolute
-path to a container file, a relative path from the current directory, or
-a relative path from one of the directories in the C<BEAM_PATH> environment
-variable (separated by C<:>).
 
 =head1 ENVIRONMENT
 
@@ -48,7 +39,7 @@ L<Beam::Minion>, L<Minion>
 use strict;
 use warnings;
 use Beam::Wire;
-use Beam::Runner::Util qw( find_container_path );
+use Beam::Runner::Util qw( find_containers );
 use Beam::Minion::Util qw( minion );
 use Scalar::Util qw( weaken );
 use Mojolicious;
@@ -56,7 +47,7 @@ use Mojo::Log;
 use Minion::Command::minion::worker;
 
 sub run {
-    my ( $class, $container ) = @_;
+    my ( $class ) = @_;
     my $app = Mojolicious->new(
         log => Mojo::Log->new, # Log to STDERR
     );
@@ -67,21 +58,24 @@ sub run {
     weaken $minion->app($app)->{app};
     $app->helper(minion => sub {$minion});
 
-    my $path = find_container_path( $container );
-    my $wire = Beam::Wire->new( file => $path );
-    my $config = $wire->config;
-    for my $name ( keys %$config ) {
-        next unless $wire->is_meta( $config->{ $name }, 1 );
-        $minion->add_task( $name => sub {
-            my ( $job, @args ) = @_;
-            my $obj = $wire->get( $name );
-            my $exit = $obj->run( @args );
-            my $method = $exit ? 'fail' : 'finish';
-            $job->$method( { exit => $exit } );
-        } );
+    my %container = find_containers();
+    for my $container_name ( keys %container ) {
+        my $path = $container{ $container_name };
+        my $wire = Beam::Wire->new( file => $path );
+        my $config = $wire->config;
+        for my $service_name ( keys %$config ) {
+            next unless $wire->is_meta( $config->{ $service_name }, 1 );
+            $minion->add_task( "$container_name:$service_name" => sub {
+                my ( $job, @args ) = @_;
+                my $obj = $wire->get( $service_name );
+                my $exit = $obj->run( @args );
+                my $method = $exit ? 'fail' : 'finish';
+                $job->$method( { exit => $exit } );
+            } );
+        }
+        my $cmd = Minion::Command::minion::worker->new( app => $app );
+        $cmd->run;
     }
-    my $cmd = Minion::Command::minion::worker->new( app => $app );
-    $cmd->run( '-q', $container );
 }
 
 1;

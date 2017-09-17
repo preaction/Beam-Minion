@@ -6,7 +6,7 @@ our $VERSION = '0.007';
 
     # Command-line interface
     export BEAM_MINION=sqlite://test.db
-    beam minion worker <container>...
+    beam minion worker
     beam minion run <container> <service> [<args>...]
     beam minion help
 
@@ -65,9 +65,9 @@ SQLite).
 =head2 Start a Worker
 
 Once the C<BEAM_MINION> environment variable is set, you can start
-a worker with C<< beam minion worker <container> >>. Each worker can run
-jobs from one container, specified as the argument to the C<beam minion
-worker> command. Each worker will run up to 4 jobs concurrently.
+a worker with C<< beam minion worker >>. Each worker can run jobs from
+all the containers it can find from the C<BEAM_PATH> environment
+variable. Each worker will run up to 4 jobs concurrently.
 
 =head2 Spawn a Job
 
@@ -103,7 +103,7 @@ The C<BEAM_MINION> environment variable must be set.
 sub enqueue {
     my ( $class, $container, $task, @args ) = @_;
     my $minion = minion();
-    $minion->enqueue( $task, \@args, { queue => $container } );
+    $minion->enqueue( "$container:$task", \@args );
 }
 
 1;

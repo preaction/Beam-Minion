@@ -34,7 +34,7 @@ subtest 'BEAM_MINION must be set' => sub {
 }
 
 my $minion = Minion->new( SQLite => 'sqlite:' . $tmp->filename );
-$minion->add_task( ping => sub {
+$minion->add_task( 'container:ping' => sub {
     # This sub runs in a fork, so we pass out the args via the job's
     # "result"
     my ( $job, @args ) = @_;
@@ -43,7 +43,7 @@ $minion->add_task( ping => sub {
 
 is $minion->stats->{inactive_jobs}, 1, '1 pending job';
 
-my $job = $minion->worker->register->dequeue( 0.5, { queues => ['container'] } );
+my $job = $minion->worker->register->dequeue( 0.5 );
 ok $job, 'job exists';
 
 $job->perform;
