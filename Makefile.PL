@@ -19,6 +19,7 @@ my %WriteMakefileArgs = (
   "PREREQ_PM" => {
     "Beam::Runner" => "0.014",
     "Beam::Wire" => "1.019",
+    "Getopt::Long" => "2.36",
     "Minion" => 0,
     "Mojolicious" => 7
   },
@@ -46,6 +47,7 @@ my %FallbackPrereqs = (
   "Beam::Wire" => "1.019",
   "ExtUtils::MakeMaker" => 0,
   "File::Spec" => 0,
+  "Getopt::Long" => "2.36",
   "IO::Handle" => 0,
   "IPC::Open3" => 0,
   "Minion" => 0,
