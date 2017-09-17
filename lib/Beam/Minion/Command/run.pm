@@ -4,7 +4,8 @@ our $VERSION = '0.007';
 
 =head1 SYNOPSIS
 
-    beam minion run <container> <service> [<args>...]
+    beam minion run [-d <delay>] [-a <attempts>] [-p <priority]
+        <container> <service> [<args>...]
 
 =head1 DESCRIPTION
 
@@ -27,6 +28,23 @@ variable (separated by C<:>).
 
 The service that defines the task to run. Must be an object that consumes
 the L<Beam::Runner> role.
+
+=head1 OPTIONS
+
+=head2 delay
+
+The amount of time, in seconds, to delay the start of the job (from now).
+Defaults to C<0>.
+
+=head2 attempts
+
+The number of times to automatically retry the job if it fails.
+Subsequent attempts will be delayed by an increasing amount of time
+(calculated by C<(retries ** 4) + 15>).
+
+=head2 priority
+
+The job's priority. Higher priority jobs will be run first. Defaults to C<0>.
 
 =head1 ENVIRONMENT
 
@@ -52,10 +70,16 @@ L<Beam::Minion>, L<Minion>
 use strict;
 use warnings;
 use Beam::Minion;
+use Getopt::Long qw( GetOptionsFromArray );
 
 sub run {
     my ( $class, $container, $service_name, @args ) = @_;
-    Beam::Minion->enqueue( $container, $service_name, @args );
+    GetOptionsFromArray( \@args, \my %opt,
+        'delay|d=i',
+        'attempts|a=i',
+        'priority|p=i',
+    );
+    Beam::Minion->enqueue( $container, $service_name, \@args, \%opt );
 }
 
 1;

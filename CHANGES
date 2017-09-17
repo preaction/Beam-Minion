@@ -8,6 +8,16 @@ Changelog for Beam-Minion
       default. This opens up Minion queues to be used for other
       purposes, such as prioritization and partitioning jobs.
 
+    - BREAKING CHANGE: The `Beam::Minion::enqueue` method now accepts an
+      arrayref of args and a hashref of options. Previously, the
+      arguments were allowed as a list, but this prevented us from
+      adding the options hashref.
+
+    [Added]
+
+    - Added options to the `beam minion run` command to set job
+      auto-retry, job delay, and job priority.
+
 0.006     2017-08-22 18:48:33-05:00 America/Chicago
 
     [Fixed]

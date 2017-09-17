@@ -52,4 +52,22 @@ is $got_args[0], 'foo', 'job args are correct';
 
 $minion->worker->unregister;
 
+subtest 'job options' => sub {
+    my $class = 'Beam::Minion::Command::run';
+    $ENV{BEAM_MINION} = 'sqlite:' . $tmp->filename;
+    $class->run( container => 'ping', 'foo', '--delay', 1, '--attempts', 2, '--priority', 3 );
+
+    my $job = $minion->worker->register->dequeue( 1.5 );
+    ok $job, 'job exists';
+
+    $job->perform;
+    my @got_args = @{ $job->info->{result} };
+    is $got_args[0], 'foo', 'job args are correct';
+    is $job->info->{attempts}, 2, 'correct number of attempts set in job';
+    is $job->info->{priority}, 3, 'correct priority set';
+    cmp_ok $job->info->{created}, '<', $job->info->{delayed}, 'job was delayed by 1 second';
+
+    $minion->worker->unregister;
+};
+
 done_testing;

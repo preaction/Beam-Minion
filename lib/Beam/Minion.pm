@@ -12,7 +12,7 @@ our $VERSION = '0.007';
 
     # Perl interface
     local $ENV{BEAM_MINION} = 'sqlite://test.db';
-    Beam::Minion->enqueue( $container, $service, @args );
+    Beam::Minion->enqueue( $container, $service, \@args, \%opt );
 
 =head1 DESCRIPTION
 
@@ -93,17 +93,38 @@ use Beam::Minion::Util qw( minion );
 
 =sub enqueue
 
-    Beam::Minion->enqueue( $container_name, $task_name, @args );
+    Beam::Minion->enqueue( $container_name, $task_name, \@args, \%opt );
 
 Enqueue the task named C<$task_name> from the container named C<$container_name>.
 The C<BEAM_MINION> environment variable must be set.
 
+C<\%opt> is a hash reference with the following keys:
+
+=over
+
+=item attempts
+
+Number of times to retry this job if it fails. Defaults to C<1>.
+
+=item delay
+
+Time (in seconds) to delay this job (from now). Defaults to C<0>.
+
+=item priority
+
+The job priority. Higher priority jobs get performed first. Defaults to C<0>.
+
+=back
+
+(These are the same options allowed in L<the Minion "enqueue"
+method|http://mojolicious.org/perldoc/Minion#enqueue1>)
+
 =cut
 
 sub enqueue {
-    my ( $class, $container, $task, @args ) = @_;
+    my ( $class, $container, $task, $args, $opt ) = @_;
     my $minion = minion();
-    $minion->enqueue( "$container:$task", \@args );
+    $minion->enqueue( "$container:$task", $args, $opt );
 }
 
 1;
