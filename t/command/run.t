@@ -19,6 +19,7 @@ use File::Temp;
 my $tmp = File::Temp->new( EXLOCK => 0 );
 
 subtest 'BEAM_MINION must be set' => sub {
+    local $ENV{BEAM_MINION} = '';
     like
         exception {
             Beam::Minion::Command::run->run( container => 'ping', 'foo' );
