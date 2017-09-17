@@ -46,6 +46,8 @@ subtest 'tasks are created' => sub {
     my $tasks = $minion->tasks;
     ok exists $tasks->{'container:success'}, 'success task exists';
     ok exists $tasks->{'container:failure'}, 'failure task exists';
+    ok exists $tasks->{'container:exception'}, 'exception task exists';
+    ok exists $tasks->{'container:consfail'}, 'consfail task exists';
 };
 
 subtest 'success job' => sub {
@@ -61,6 +63,26 @@ subtest 'failure job' => sub {
     $minion->perform_jobs();
     my $job = $minion->job( $id );
     is_deeply $job->info->{result}, { exit => 1 }, 'job result is correct';
+    is $job->info->{state}, 'failed', 'job failed';
+};
+
+subtest 'job exception' => sub {
+    my $id = $minion->enqueue( 'container:exception', [] );
+    $minion->perform_jobs();
+    my $job = $minion->job( $id );
+    my $result = $job->info->{result};
+    ok !exists $result->{exit}, 'exit is unset';
+    like $result->{error}, qr{^Foo}, 'exception set as error';
+    is $job->info->{state}, 'failed', 'job failed';
+};
+
+subtest 'constructor failure' => sub {
+    my $id = $minion->enqueue( 'container:consfail', [] );
+    $minion->perform_jobs();
+    my $job = $minion->job( $id );
+    my $result = $job->info->{result};
+    ok !exists $result->{exit}, 'exit is unset';
+    ok $result->{error}, 'exception set as error';
     is $job->info->{state}, 'failed', 'job failed';
 };
 

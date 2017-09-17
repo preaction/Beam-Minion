@@ -67,8 +67,17 @@ sub run {
             next unless $wire->is_meta( $config->{ $service_name }, 1 );
             $minion->add_task( "$container_name:$service_name" => sub {
                 my ( $job, @args ) = @_;
-                my $obj = $wire->get( $service_name );
-                my $exit = $obj->run( @args );
+
+                my $obj = eval { $wire->get( $service_name ) };
+                if ( $@ ) {
+                    return $job->fail( { error => $@ } );
+                }
+
+                my $exit = eval { $obj->run( @args ) };
+                if ( $@ ) {
+                    return $job->fail( { error => $@ } );
+                }
+
                 my $method = $exit ? 'fail' : 'finish';
                 $job->$method( { exit => $exit } );
             } );

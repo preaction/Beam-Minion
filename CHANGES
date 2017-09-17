@@ -18,6 +18,12 @@ Changelog for Beam-Minion
     - Added options to the `beam minion run` command to set job
       auto-retry, job delay, and job priority.
 
+    [Fixed]
+
+    - Added better exception handling to Minion jobs. Now if the service
+      dies during construction, or the `run` method throws an exception,
+      the job result will reflect this and show the exception.
+
 0.006     2017-08-22 18:48:33-05:00 America/Chicago
 
     [Fixed]
