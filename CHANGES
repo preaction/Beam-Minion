@@ -5,6 +5,8 @@ Changelog for Beam-Minion
     [Fixed]
 
     - Fixed tests that fail when BEAM_MINION environment variable is set
+    - Fixed worker only loading one container file instead of all
+      container files
 
 0.008     2017-09-17 18:00:34-05:00 America/Chicago
 

@@ -82,9 +82,10 @@ sub run {
                 $job->$method( { exit => $exit } );
             } );
         }
-        my $cmd = Minion::Command::minion::worker->new( app => $app );
-        $cmd->run;
     }
+
+    my $cmd = Minion::Command::minion::worker->new( app => $app );
+    $cmd->run;
 }
 
 1;
