@@ -2,6 +2,12 @@ Changelog for Beam-Minion
 
 {{ $NEXT }}
 
+    [Added]
+
+    - Added "beam minion job" command to list jobs, retry jobs, list
+      workers, and otherwise manage the job queue. This is a proxy for
+      the Minion::Command::minion::job command.
+
     [Fixed]
 
     - Fixed tests that fail when BEAM_MINION environment variable is set
