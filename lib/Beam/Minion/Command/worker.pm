@@ -38,52 +38,12 @@ L<Beam::Minion>, L<Minion>
 
 use strict;
 use warnings;
-use Beam::Wire;
-use Beam::Runner::Util qw( find_containers );
-use Beam::Minion::Util qw( minion );
-use Scalar::Util qw( weaken );
-use Mojolicious;
-use Mojo::Log;
+use Beam::Minion::Util qw( build_mojo_app );
 use Minion::Command::minion::worker;
 
 sub run {
     my ( $class ) = @_;
-    my $app = Mojolicious->new(
-        log => Mojo::Log->new, # Log to STDERR
-    );
-
-    push @{$app->commands->namespaces}, 'Minion::Command';
-
-    my $minion = minion();
-    weaken $minion->app($app)->{app};
-    $app->helper(minion => sub {$minion});
-
-    my %container = find_containers();
-    for my $container_name ( keys %container ) {
-        my $path = $container{ $container_name };
-        my $wire = Beam::Wire->new( file => $path );
-        my $config = $wire->config;
-        for my $service_name ( keys %$config ) {
-            next unless $wire->is_meta( $config->{ $service_name }, 1 );
-            $minion->add_task( "$container_name:$service_name" => sub {
-                my ( $job, @args ) = @_;
-
-                my $obj = eval { $wire->get( $service_name ) };
-                if ( $@ ) {
-                    return $job->fail( { error => $@ } );
-                }
-
-                my $exit = eval { $obj->run( @args ) };
-                if ( $@ ) {
-                    return $job->fail( { error => $@ } );
-                }
-
-                my $method = $exit ? 'fail' : 'finish';
-                $job->$method( { exit => $exit } );
-            } );
-        }
-    }
-
+    my $app = build_mojo_app();
     my $cmd = Minion::Command::minion::worker->new( app => $app );
     $cmd->run;
 }
