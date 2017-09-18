@@ -2,6 +2,10 @@ Changelog for Beam-Minion
 
 {{ $NEXT }}
 
+    [Fixed]
+
+    - Fixed job command not processing options
+
 0.009     2017-09-18 13:25:40-05:00 America/Chicago
 
     [Added]

@@ -34,10 +34,10 @@ my $mock = Mock::MonkeyPatch->patch(
 my $class = 'Beam::Minion::Command::job';
 $ENV{BEAM_MINION} = 'sqlite:' . $tmp->filename;
 $ENV{BEAM_PATH} = catdir( $FindBin::Bin, '..', 'share' );
-$class->run();
+$class->run( '-w' );
 
 ok $mock->called, 'Minion::Command::minion::job->run called';
-is_deeply $mock->method_arguments, [qw()], 'arguments are correct';
+is_deeply $mock->method_arguments, [qw( -w )], 'arguments are correct';
 
 my $invocant = $mock->arguments->[0];
 my $minion = $invocant->app->minion;

@@ -83,10 +83,10 @@ use Beam::Minion::Util qw( build_mojo_app );
 use Minion::Command::minion::job;
 
 sub run {
-    my ( $class ) = @_;
+    my ( $class, @args ) = @_;
     my $app = build_mojo_app();
     my $cmd = Minion::Command::minion::job->new( app => $app );
-    $cmd->run;
+    $cmd->run( @args );
 }
 
 1;
