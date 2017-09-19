@@ -1,5 +1,5 @@
 package Beam::Minion::Command::run;
-our $VERSION = '0.011';
+our $VERSION = '0.012';
 # ABSTRACT: Command to enqueue a job on Beam::Minion job queue
 
 =head1 SYNOPSIS

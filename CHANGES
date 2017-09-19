@@ -2,6 +2,8 @@ Changelog for Beam-Minion
 
 {{ $NEXT }}
 
+0.011     2017-09-19 15:18:44-05:00 America/Chicago
+
     [Fixed]
 
     - Added missing prereq on Module::Runtime. Thanks @manwar and
