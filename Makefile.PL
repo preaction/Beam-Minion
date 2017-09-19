@@ -21,6 +21,7 @@ my %WriteMakefileArgs = (
     "Beam::Wire" => "1.019",
     "Getopt::Long" => "2.36",
     "Minion" => 0,
+    "Module::Runtime" => 0,
     "Mojolicious" => 7
   },
   "TEST_REQUIRES" => {
@@ -53,6 +54,7 @@ my %FallbackPrereqs = (
   "Minion" => 0,
   "Minion::Backend::SQLite" => 0,
   "Mock::MonkeyPatch" => 0,
+  "Module::Runtime" => 0,
   "Mojo::SQLite" => "2.002",
   "Mojolicious" => 7,
   "Test::Fatal" => 0,

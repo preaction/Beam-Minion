@@ -4,7 +4,7 @@ Beam::Minion - A distributed task runner for Beam::Wire containers
 
 # VERSION
 
-version 0.010
+version 0.011
 
 # STATUS
 
@@ -107,6 +107,10 @@ a worker is available, it will start running jobs from the queue.
 # AUTHOR
 
 Doug Bell <preaction@cpan.org>
+
+# CONTRIBUTOR
+
+Mohammad S Anwar <mohammad.anwar@yahoo.com>
 
 # COPYRIGHT AND LICENSE
 
