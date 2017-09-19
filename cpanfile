@@ -4,6 +4,7 @@ requires "Getopt::Long" => "2.36";
 requires "Minion" => "0";
 requires "Mojolicious" => "7";
 requires "perl" => "5.010";
+requires "Module::Runtime" => "0";
 
 on 'test' => sub {
   requires "ExtUtils::MakeMaker" => "0";
