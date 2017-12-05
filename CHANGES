@@ -2,6 +2,8 @@ Changelog for Beam-Minion
 
 {{ $NEXT }}
 
+0.012     2017-12-05 13:03:34-06:00 America/Chicago
+
     [Fixed]
 
     - Beam::Minion now supports Minion 8
