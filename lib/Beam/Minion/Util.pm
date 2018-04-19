@@ -128,14 +128,14 @@ sub build_mojo_app {
             $minion->add_task( "$container_name:$service_name" => sub {
                 my ( $job, @args ) = @_;
 
-                my $obj = eval { $wire->get( $service_name ) };
+                my $obj = eval { $wire->get( $service_name, lifecycle => 'factory' ) };
                 if ( $@ ) {
                     return $job->fail( { error => $@ } );
                 }
 
                 my $exit = eval { $obj->run( @args ) };
-                if ( $@ ) {
-                    return $job->fail( { error => $@ } );
+                if ( my $err = $@ ) {
+                    return $job->fail( { error => $err } );
                 }
 
                 my $method = $exit ? 'fail' : 'finish';
