@@ -1,5 +1,5 @@
 package Beam::Minion::Command::job;
-our $VERSION = '0.013';
+our $VERSION = '0.014';
 # ABSTRACT: Command to manage minion jobs
 
 =head1 SYNOPSIS

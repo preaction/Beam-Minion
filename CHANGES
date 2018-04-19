@@ -2,6 +2,8 @@ Changelog for Beam-Minion
 
 {{ $NEXT }}
 
+0.013     2018-04-19 13:30:58+02:00 Europe/Oslo
+
     [Fixed]
 
     - Task objects are now destroyed and any cleanup methods called
