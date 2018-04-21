@@ -1,5 +1,5 @@
 package Beam::Minion;
-our $VERSION = '0.014';
+our $VERSION = '0.015';
 # ABSTRACT: A distributed task runner for Beam::Wire containers
 
 =head1 SYNOPSIS
