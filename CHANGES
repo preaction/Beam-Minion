@@ -2,6 +2,14 @@ Changelog for Beam-Minion
 
 {{ $NEXT }}
 
+    [Fixed]
+
+    - Increased Minion dependency to 9 since we rely on some methods for
+      testing. Thanks @eserte!
+    - To improve after-task cleanup, we now create and destroy
+      containers during jobs, rather than caching the container (and all
+      of the objects).
+
 0.013     2018-04-19 13:30:58+02:00 Europe/Oslo
 
     [Fixed]
