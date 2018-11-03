@@ -115,7 +115,6 @@ sub build_mojo_app {
     push @{$app->commands->namespaces}, 'Minion::Command';
 
     my $minion = minion();
-    weaken $minion->app($app)->{app};
     $app->helper(minion => sub {$minion});
 
     my %container = find_containers();

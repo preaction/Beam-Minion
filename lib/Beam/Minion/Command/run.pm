@@ -67,13 +67,12 @@ L<Beam::Minion>, L<Minion>
 
 =cut
 
-use strict;
-use warnings;
+use Mojo::Base -base;
 use Beam::Minion;
 use Getopt::Long qw( GetOptionsFromArray );
 
 sub run {
-    my ( $class, $container, $service_name, @args ) = @_;
+    my ( $self, $container, $service_name, @args ) = @_;
     GetOptionsFromArray( \@args, \my %opt,
         'delay|d=i',
         'attempts|a=i',
