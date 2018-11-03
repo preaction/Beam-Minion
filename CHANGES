@@ -2,6 +2,13 @@ Changelog for Beam-Minion
 
 {{ $NEXT }}
 
+    [Fixed]
+
+    - Fixed test failures due to weakened references added in Minion
+      9.07. Thanks @eserte! [Github #4]
+    - Silenced a warning during tests about "Local::Service::DESTROYED"
+      used only once
+
 0.014     2018-04-21 10:29:44+02:00 Europe/Oslo
 
     [Fixed]
