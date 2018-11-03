@@ -2,6 +2,8 @@ Changelog for Beam-Minion
 
 {{ $NEXT }}
 
+0.015     2018-11-03 14:16:37-05:00 America/Chicago
+
     [Fixed]
 
     - Fixed test failures due to weakened references added in Minion
