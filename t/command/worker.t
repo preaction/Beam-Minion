@@ -100,6 +100,7 @@ subtest 'test that object is destroyed' => sub {
     my $id = $minion->enqueue( 'container:success', [] );
     my $job = $minion->job( $id );
     $job->execute;
+    no warnings 'once';
     is $Local::Service::DESTROYED, 1, 'DESTROY was called';
 };
 
