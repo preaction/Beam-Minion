@@ -2,6 +2,8 @@ Changelog for Beam-Minion
 
 {{ $NEXT }}
 
+0.016     2019-03-07 21:05:08-06:00 America/Chicago
+
     [Fixed]
 
     - Fixed a problem that caused commands to not work at all
