@@ -35,7 +35,7 @@ sub run {
         }
         die "Error loading module '$cmd_class': $@\n";
     }
-    return $cmd_class->run( @args );
+    return $cmd_class->new->run( @args );
 }
 
 1;
