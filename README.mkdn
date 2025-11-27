@@ -4,7 +4,7 @@ Beam::Minion - A distributed task runner for Beam::Wire containers
 
 # VERSION
 
-version 0.016
+version 0.017
 
 # STATUS
 
@@ -13,23 +13,33 @@ version 0.016
 # SYNOPSIS
 
     # Command-line interface
-    export BEAM_MINION=sqlite://test.db
+    export BEAM_MINION=sqlite://test.db            # Configure a DSN directly
+    export BEAM_MINION=file:///etc/beam/minion.yml # Configuration file
     beam minion worker
     beam minion run <container> <service> [<args>...]
     beam minion help
 
     # Perl interface
-    local $ENV{BEAM_MINION} = 'sqlite://test.db';
+    Beam::Minion->init(%config)
     Beam::Minion->enqueue( $container, $service, \@args, \%opt );
 
 # DESCRIPTION
 
-[Beam::Minion](https://metacpan.org/pod/Beam::Minion) is a distributed task runner. One or more workers are
+[Beam::Minion](https://metacpan.org/pod/Beam%3A%3AMinion) is a distributed task runner. One or more workers are
 created to run tasks, and then each task is sent to a worker to be run.
-Tasks are configured as [Beam::Runnable](https://metacpan.org/pod/Beam::Runnable) objects by [Beam::Wire](https://metacpan.org/pod/Beam::Wire)
+Tasks are configured as [Beam::Runnable](https://metacpan.org/pod/Beam%3A%3ARunnable) objects by [Beam::Wire](https://metacpan.org/pod/Beam%3A%3AWire)
 container files.
 
 # SUBROUTINES
+
+## init
+
+    Beam::Minion->init(%config)
+
+Set the configuration for Beam::Minion. This overrides the `BEAM_MINION` environment
+variable to allow setting configuration from any kind of source. The configuration should
+be a hash with a single key for the [Minion](https://metacpan.org/pod/Minion) backend to use, and a value to be 
+passed to that backend's constructor (same as the arguments to ["new" in Minion](https://metacpan.org/pod/Minion#new)).
 
 ## enqueue
 
@@ -59,27 +69,38 @@ method](http://mojolicious.org/perldoc/Minion#enqueue1))
 
 ## Configure Minion
 
-To start running your [Beam::Runner](https://metacpan.org/pod/Beam::Runner) jobs, you must first start
+To start running your [Beam::Runner](https://metacpan.org/pod/Beam%3A%3ARunner) jobs, you must first start
 a [Minion](https://metacpan.org/pod/Minion) worker with the [beam minion
-worker.command](https://metacpan.org/pod/Beam::Minion::Command::worker).  Minion requires
+worker.command](https://metacpan.org/pod/Beam%3A%3AMinion%3A%3ACommand%3A%3Aworker).  Minion requires
 a database to coordinate workers, and communicates with this database
-using a [Minion::Backend](https://metacpan.org/pod/Minion::Backend).
+using a [Minion::Backend](https://metacpan.org/pod/Minion%3A%3ABackend).
 
 The supported Minion backends are:
 
-- [Minion::Backend::SQLite](https://metacpan.org/pod/Minion::Backend::SQLite) - `sqlite:<db_path>`
-- [Minion::Backend::Pg](https://metacpan.org/pod/Minion::Backend::Pg) - `postgresql://<user>:<pass>@<host>/<database>`
-- [Minion::Backend::mysql](https://metacpan.org/pod/Minion::Backend::mysql) - `mysql://<user>:<pass>@<host>/<database>`
-- [Minion::Backend::MongoDB](https://metacpan.org/pod/Minion::Backend::MongoDB) - `mongodb://<host>:<port>`
+- [Minion::Backend::SQLite](https://metacpan.org/pod/Minion%3A%3ABackend%3A%3ASQLite) - `sqlite:<db_path>`
+- [Minion::Backend::Pg](https://metacpan.org/pod/Minion%3A%3ABackend%3A%3APg) - `postgresql://<user>:<pass>@<host>/<database>`
+- [Minion::Backend::mysql](https://metacpan.org/pod/Minion%3A%3ABackend%3A%3Amysql) - `mysql://<user>:<pass>@<host>/<database>`
+- [Minion::Backend::MongoDB](https://metacpan.org/pod/Minion%3A%3ABackend%3A%3AMongoDB) - `mongodb://<host>:<port>`
 
-Once you've picked a database backend, configure the `BEAM_MINION`
-environment variable with the URL. Minion will automatically deploy the
+Minion will automatically deploy the
 database tables it needs, so be sure to allow the right permissions (if
 the database has such things).
 
 In order to communicate with Minion workers on other machines, it will
 be necessary to use a database accessible from the network (so, not
 SQLite).
+
+### Environment variable
+
+Once you've picked a database backend, configure the `BEAM_MINION`
+environment variable with the URL. This could leave the password in the environment variable 
+which could leak out.
+
+### Configuration File
+
+To read configuration from a file, set the `BEAM_MINION` environment variable
+to a URL starting with `file://` and then a path to a YAML file containing a
+hash of the configuration passed to ["init" in Beam::Minion](https://metacpan.org/pod/Beam%3A%3AMinion#init).
 
 ## Start a Worker
 
@@ -91,7 +112,7 @@ variable. Each worker will run up to 4 jobs concurrently.
 ## Spawn a Job
 
 Jobs are spawned with `beam minion run <container> <service>`.
-The `service` must be an object that consumes the [Beam::Runnable](https://metacpan.org/pod/Beam::Runnable)
+The `service` must be an object that consumes the [Beam::Runnable](https://metacpan.org/pod/Beam%3A%3ARunnable)
 role. `container` should be a path to a container file and can be
 an absolute path, a path relative to the current directory, or a
 path relative to one of the paths in the `BEAM_PATH` environment
@@ -102,7 +123,7 @@ a worker is available, it will start running jobs from the queue.
 
 # SEE ALSO
 
-[Beam::Wire](https://metacpan.org/pod/Beam::Wire), [Beam::Runner](https://metacpan.org/pod/Beam::Runner), [Minion](https://metacpan.org/pod/Minion)
+[Beam::Wire](https://metacpan.org/pod/Beam%3A%3AWire), [Beam::Runner](https://metacpan.org/pod/Beam%3A%3ARunner), [Minion](https://metacpan.org/pod/Minion)
 
 # AUTHOR
 
