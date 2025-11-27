@@ -28,6 +28,7 @@ use Scalar::Util qw( weaken );
 use Mojolicious;
 use Mojo::Log;
 use Beam::Wire;
+use YAML::PP qw( LoadFile );
 
 
 our @EXPORT_OK = qw( minion_init_args minion build_mojo_app );
@@ -39,6 +40,9 @@ our %BACKEND = (
     mysql => 'mysql',
 );
 
+# The saved init args, in case we override them with Beam::Minion->init
+our @INIT_ARGS = ();
+
 =sub minion_init_args
 
     my %args = minion_init_args();
@@ -49,6 +53,11 @@ the C<BEAM_MINION> environment variable.
 This environment variable can take a few forms:
 
 =over
+
+=item file://<path>
+
+A path to a YAML file of configuration to read. Should contain a single key and value
+which are the Minion backend to use and the argument to its constructor.
 
 =item <url>
 
@@ -74,16 +83,30 @@ C<+>:
 =cut
 
 sub minion_init_args {
+    if (@_) {
+      @INIT_ARGS = @_;
+    }
+    if (@INIT_ARGS) {
+        return @INIT_ARGS;
+    }
     die "You must set the BEAM_MINION environment variable to the Minion database URL.\n"
         . "See `perldoc Beam::Minion` for getting started instructions.\n"
         unless $ENV{BEAM_MINION};
     my ( $backend, $url );
+    # If there's a `+`, we must be doing multi-args
     if ( $ENV{BEAM_MINION} =~ /^[^+:]+\+/ ) {
-        my @args = split /\+/, $ENV{BEAM_MINION};
-        return @args;
+        @INIT_ARGS = split /\+/, $ENV{BEAM_MINION};
+        return @INIT_ARGS;
     }
     my ( $schema ) = $ENV{BEAM_MINION} =~ /^([^:]+)/;
-    return $BACKEND{ $schema }, $ENV{BEAM_MINION};
+    # Load config from a YAML file
+    if ($schema eq 'file') {
+      my ( undef, $path ) = split '://', $ENV{BEAM_MINION};
+      @INIT_ARGS = (LoadFile($path))[0]->%*;
+      return @INIT_ARGS;
+    }
+    @INIT_ARGS = ($BACKEND{ $schema }, $ENV{BEAM_MINION});
+    return @INIT_ARGS;
 }
 
 =sub minion

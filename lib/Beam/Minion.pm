@@ -5,13 +5,14 @@ our $VERSION = '0.017';
 =head1 SYNOPSIS
 
     # Command-line interface
-    export BEAM_MINION=sqlite://test.db
+    export BEAM_MINION=sqlite://test.db            # Configure a DSN directly
+    export BEAM_MINION=file:///etc/beam/minion.yml # Configuration file
     beam minion worker
     beam minion run <container> <service> [<args>...]
     beam minion help
 
     # Perl interface
-    local $ENV{BEAM_MINION} = 'sqlite://test.db';
+    Beam::Minion->init(%config)
     Beam::Minion->enqueue( $container, $service, \@args, \%opt );
 
 =head1 DESCRIPTION
@@ -53,14 +54,25 @@ L<Minion::Backend::MongoDB> - C<< mongodb://<host>:<port> >>
 
 =back
 
-Once you've picked a database backend, configure the C<BEAM_MINION>
-environment variable with the URL. Minion will automatically deploy the
+Minion will automatically deploy the
 database tables it needs, so be sure to allow the right permissions (if
 the database has such things).
 
 In order to communicate with Minion workers on other machines, it will
 be necessary to use a database accessible from the network (so, not
 SQLite).
+
+=head3 Environment variable
+
+Once you've picked a database backend, configure the C<BEAM_MINION>
+environment variable with the URL. This could leave the password in the environment variable 
+which could leak out.
+
+=head3 Configuration File
+
+To read configuration from a file, set the C<BEAM_MINION> environment variable
+to a URL starting with C<file://> and then a path to a YAML file containing a
+hash of the configuration passed to L<Beam::Minion/init>.
 
 =head2 Start a Worker
 
@@ -89,7 +101,23 @@ L<Beam::Wire>, L<Beam::Runner>, L<Minion>
 
 use strict;
 use warnings;
-use Beam::Minion::Util qw( minion );
+use Mojo::Base -strict, -signatures;
+use Beam::Minion::Util qw( minion minion_init_args );
+
+=sub init
+
+  Beam::Minion->init(%config)
+
+Set the configuration for Beam::Minion. This overrides the C<BEAM_MINION> environment
+variable to allow setting configuration from any kind of source. The configuration should
+be a hash with a single key for the L<Minion> backend to use, and a value to be 
+passed to that backend's constructor (same as the arguments to L<Minion/new>).
+
+=cut
+
+sub init ($class, %config) {
+  minion_init_args(%config);
+}
 
 =sub enqueue
 
