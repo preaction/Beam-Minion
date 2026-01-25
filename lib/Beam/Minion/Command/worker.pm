@@ -1,5 +1,5 @@
 package Beam::Minion::Command::worker;
-our $VERSION = '0.018';
+our $VERSION = '0.019';
 # ABSTRACT: Command to run a Beam::Minion worker
 
 =head1 SYNOPSIS

@@ -2,6 +2,8 @@ Changelog for Beam-Minion
 
 {{ $NEXT }}
 
+0.018     2026-01-25 12:44:06-06:00 America/Chicago
+
   [Added]
 
   - Switched to Log::Any and added contextual logging (job ID and task name) for jobs
