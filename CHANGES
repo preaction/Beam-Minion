@@ -2,6 +2,10 @@ Changelog for Beam-Minion
 
 {{ $NEXT }}
 
+  [Fixed]
+
+  - Fixed minimum Log::Any version to get one that supports contextual logging...
+
 0.018     2026-01-25 12:44:06-06:00 America/Chicago
 
   [Added]
